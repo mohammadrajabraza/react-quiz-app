@@ -132,11 +132,11 @@ body {
   align-self: flex-end;
 }
 
-.questionBox .questionContainer .questionFooter .pagination {
+.questionBox .questionContainer .questionFooter .actions {
   margin: 15px 25px;
 }
 
-.pagination {
+.actions {
   display: flex;
   justify-content: space-between;
 }
@@ -182,4 +182,35 @@ body {
     height: auto !important;
     border-radius: 6px 6px 0px 0px;
   }
+}
+
+.fade-enter {
+  opacity: 0;
+  transform: translateX(200%);
+}
+.fade-enter-active {
+  opacity: 0.5;
+  transform: translateX(100%);
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+
+.fade-enter-done {
+  opacity: 1;
+  transform: translateX(0%);
+}
+
+.fade-exit {
+  opacity: 1;
+  transform: translateX(0%);
+}
+
+.fade-exit-active{
+  opacity: 0.5;
+  transform: translateX(-100%);
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+
+.fade-exit-done{
+  opacity: 0;
+  transform: translateX(-200%);
 }
