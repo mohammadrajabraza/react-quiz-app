@@ -84,11 +84,7 @@ body {
   margin-top: 0.5rem;
 }
 
-.questionBox .titleContainer {
-  text-align: center;
-  margin: 0 auto;
-  padding: 1.5rem;
-}
+
 
 .questionBox .quizForm {
   display: block;
@@ -127,36 +123,6 @@ body {
   height: 100%;
   width: 100%;
   min-width: 480px;
-}
-
-.questionBox .questionContainer .optionContainer {
-  margin-top: 12px;
-  flex-grow: 1;
-}
-
-.questionBox .questionContainer .optionContainer .option {
-  border-radius: 290486px;
-  padding: 9px 18px;
-  margin: 0 18px;
-  margin-bottom: 12px;
-  transition: 0.3s;
-  cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.05);
-  color: rgba(0, 0, 0, 0.85);
-  border: transparent 1px solid;
-}
-
-.questionBox .questionContainer .optionContainer .option.is-selected {
-  border-color: rgba(0, 0, 0, 0.25);
-  background-color: white;
-}
-
-.questionBox .questionContainer .optionContainer .option:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
-.questionBox .questionContainer .optionContainer .option:active {
-  transform: scaleX(0.9);
 }
 
 .questionBox .questionContainer .questionFooter {
