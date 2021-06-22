@@ -28,6 +28,12 @@ function App() {
       alert('Bhaag lo')
   }
 
+  const back = () => {
+    current_index <= 0 ?
+      alert('Nikal lo') :
+      setCurrentIndex(current_index - 1)
+  }
+
   return (
     <div className="App">
       <section className="container">
@@ -54,7 +60,7 @@ function App() {
             </SwitchTransition>
             <footer className="questionFooter">
               <div className="actions">
-                <button className="button">Back</button>
+                <button className="button" onClick={back}>Back</button>
                 <button className="button" onClick={next}>Next</button>
               </div>
             </footer>
