@@ -21,9 +21,14 @@ function App() {
 
   const [current_index, setCurrentIndex] = useState(0)
   const [results, setResult] = useState([])
+  const [score, setScore] = useState(0);
 
-  const verifyAnswer = (answer) => question_bank[current_index].answers[answer] === 
-                                                    question_bank[current_index].correct_answer
+  const verifyAnswer = (answer) => {
+    
+    return question_bank[current_index].answers[answer] === 
+              question_bank[current_index].correct_answer
+  }
+
   const markAnswer = (index) => {
     
     let newResult = {
@@ -45,10 +50,14 @@ function App() {
     if(results[current_index] === undefined)
       swal({text: 'Answer is required to proceed!', icon:'error'})
     else {
-      current_index < question_bank.length ?
-      setCurrentIndex(current_index + 1) :
-      alert('Bhaag lo')
+      //setState function dont take effect immediately
+      if(current_index === question_bank.length -1){
+        setScore(getScore())
+      }
+
+      setCurrentIndex(current_index + 1)
     }
+
   }
 
   const back = () => {
@@ -61,6 +70,10 @@ function App() {
     setCurrentIndex(0);
   }
 
+  const getScore = () => {
+    return results.reduce((acc, item) => item.isRight ? acc + 1 : acc , 0)
+  }
+
   return (
     <div className="App">
       <section className="container">
@@ -69,7 +82,7 @@ function App() {
             <header>
               <h1 className="title is-6">Quiz App</h1>
               <div className="progressContainer">
-                <progress className="progress is-info is-small"></progress>
+                <progress className="progress is-info is-small">{(current_index/question_bank.length)*100}</progress>
                 <p></p>
               </div>
             </header>
@@ -84,8 +97,8 @@ function App() {
                   current_index <= question_bank.length -1 ?
                   <Question question={question_bank[current_index]} markAnswer={markAnswer} results={results[current_index]}/> :
                   <div className="quizCompleted has-text-centered">
-                    <h2 className="title">You did an amaizing Job!</h2>
-                    <p className="subtitle">Total Score: 8/10</p>
+                    <h2 className="title">{`You did an ${score > 7 ? 'Amaizing' : (score > 4 ? 'Good': 'Poor')} Job!`}</h2>
+                    <p className="subtitle">Total Score: {score}/10</p>
                     <br/>
                     <button className="button" onClick={restartQuiz}>Restart</button>
                   </div>
