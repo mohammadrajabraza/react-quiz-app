@@ -52,6 +52,10 @@ function App() {
       setCurrentIndex(current_index - 1)
   }
 
+  const restartQuiz = () => {
+    setCurrentIndex(0);
+  }
+
   return (
     <div className="App">
       <section className="container">
@@ -76,7 +80,7 @@ function App() {
                     <h2 className="title">You did an amaizing Job!</h2>
                     <p className="subtitle">Total Score: 8/10</p>
                     <br/>
-                    <button className="button">Restart</button>
+                    <button className="button" onClick={restartQuiz}>Restart</button>
                   </div>
                 }
                 
