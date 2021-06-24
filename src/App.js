@@ -3,27 +3,45 @@ import Question from './components/Question'
 import { useState } from 'react'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
 
+const question_bank = [
+  {  "question": "Who created the digital distribution platform Steam?", "correct_answer": "Valve", "answers": ["Valve", "Pixeltail Games", "Ubisoft", "Electronic Arts"] },
+  {  "question": `Who is the main character in "The Stanley Parable"?`, "correct_answer": "Stanley", "answers": ["The Adventure Line","Stanley", "The Narrator", "The Boss"] },
+  {  "question": `In the 2002 video game "Kingdom Hearts", how many Keyblades are usable?`, "correct_answer": "18", "answers": ["13", "16", "18", "15"] },
+  {  "question": `Which of these is NOT the name of a rival gang in the video game Saint's Row 2?`, "correct_answer": "The Zin Empire", "answers": ["The Zin Empire", "The Brotherhood", "The Ronin", "The Sons of Samedi"] },
+  {  "question": "Who is the creator of the Super Smash Bros. Series?", "correct_answer": "Masahiro Sakurai", "answers": ["Reggie Fils-Aim", "Bill Trinen", "Hideo Kojima", "Masahiro Sakurai"] },
+  {  "question": `TF2: What code does Soldier put into the door keypad in "Meet the Spy"?`, "correct_answer": "1111", "answers": ["1432", "1111", "1337", "No code"] },
+  {  "question": `In the Half-Life series, Gordon Freeman's signature weapon is a:`, "correct_answer": "Crowbar", "answers": ["Crowbar", "Sledgehammer", "Fiber Wire", "Katana"] },
+  {  "question": "In Minecraft, which two items must be combined to craft a torch?", "correct_answer": "Stick and Coal", "answers": ["Stick and Fire", "Stick and Coal", "Wood and Coal", "Wood and Fire"] },
+  {  "question": "Lanky, Funky, and Chunky are all characters featured in which series owned by Nintendo?", "correct_answer": "Donkey Kong", "answers": ["Mario", "Kirby", "Donkey Kong", "Zelda"] },
+  {  "question": `In the "Metal Gear Solid" series, what's the name of Solid Snake's brother?`, "correct_answer": "Liquid Snake", "answers": ["Kulus Snake", "Liquid Snake", "Billy Snake", "Gilur Snake"] }
+]
+
 function App() {
 
-
-  const question_bank = [
-    { "category": "Entertainment: Video Games", "type": "multiple", "difficulty": "easy", "question": "Who created the digital distribution platform Steam?", "correct_answer": "Valve", "incorrect_answers": ["Pixeltail Games", "Ubisoft", "Electronic Arts"] },
-    { "category": "Entertainment: Video Games", "type": "multiple", "difficulty": "easy", "question": `Who is the main character in "The Stanley Parable"?`, "correct_answer": "Stanley", "incorrect_answers": ["The Adventure Line", "The Narrator", "The Boss"] },
-    { "category": "Entertainment: Video Games", "type": "multiple", "difficulty": "easy", "question": `In the 2002 video game "Kingdom Hearts", how many Keyblades are usable?`, "correct_answer": "18", "incorrect_answers": ["13", "16", "15"] },
-    { "category": "Entertainment: Video Games", "type": "multiple", "difficulty": "easy", "question": `Which of these is NOT the name of a rival gang in the video game Saint's Row 2?`, "correct_answer": "The Zin Empire", "incorrect_answers": ["The Brotherhood", "The Ronin", "The Sons of Samedi"] },
-    { "category": "Entertainment: Video Games", "type": "multiple", "difficulty": "easy", "question": "Who is the creator of the Super Smash Bros. Series?", "correct_answer": "Masahiro Sakurai", "incorrect_answers": ["Reggie Fils-Aim&eacute;", "Bill Trinen", "Hideo Kojima"] },
-    { "category": "Entertainment: Video Games", "type": "multiple", "difficulty": "easy", "question": `TF2: What code does Soldier put into the door keypad in "Meet the Spy"?`, "correct_answer": "1111", "incorrect_answers": ["1432", "1337", "No code"] },
-    { "category": "Entertainment: Video Games", "type": "multiple", "difficulty": "easy", "question": `In the Half-Life series, Gordon Freeman's signature weapon is a:`, "correct_answer": "Crowbar", "incorrect_answers": ["Sledgehammer", "Fiber Wire", "Katana"] },
-    { "category": "Entertainment: Video Games", "type": "multiple", "difficulty": "easy", "question": "In Minecraft, which two items must be combined to craft a torch?", "correct_answer": "Stick and Coal", "incorrect_answers": ["Stick and Fire", "Wood and Coal", "Wood and Fire"] },
-    { "category": "Entertainment: Video Games", "type": "multiple", "difficulty": "easy", "question": "Lanky, Funky, and Chunky are all characters featured in which series owned by Nintendo?", "correct_answer": "Donkey Kong", "incorrect_answers": ["Mario", "Kirby", "Zelda"] },
-    { "category": "Entertainment: Video Games", "type": "multiple", "difficulty": "easy", "question": `In the "Metal Gear Solid" series, what's the name of Solid Snake's brother?`, "correct_answer": "Liquid Snake", "incorrect_answers": ["Kulus Snake", "Billy Snake", "Gilur Snake"] }
-  ].sort(() => Math.random() - 0.5)
-  
   const [current_index, setCurrentIndex] = useState(0)
-  const [result, setResult] = useState(0)
+  const [results, setResult] = useState([])
 
+  const verifyAnswer = (answer) => question_bank[current_index].answers[answer] === 
+                                                    question_bank[current_index].correct_answer
+
+  const markAnswer = (index) => {
+    
+    let newResult = {
+      givenAnswer : index,
+      isRight: verifyAnswer(index)
+    }
+
+    let tempResults = [...results]
+    
+    tempResults[current_index] === undefined ?
+      tempResults.push(newResult) :
+      tempResults[current_index] = newResult
+
+    setResult(tempResults)
+  }
+  
   const next = () => {
-    (current_index + 1) < question_bank.length ?
+    current_index < 10 ?
       setCurrentIndex(current_index + 1) :
       alert('Bhaag lo')
   }
@@ -50,11 +68,20 @@ function App() {
               <CSSTransition
                 key={current_index}
                 timeout={500}
-                // addEndListener={(node, done) => {
-                //   node.addEventListener("transitionend", done, false);
-                // }}
                 classNames="fade">
-                <Question question={question_bank[current_index]} />
+                {
+                  current_index <= 9 ?
+                  <Question question={question_bank[current_index]} markAnswer={markAnswer} results={results[current_index]}/> :
+                  <div className="quizCompleted has-text-centered">
+                    <h2 className="title">You did an amaizing Job!</h2>
+                    <p className="subtitle">Total Score: 8/10</p>
+                    <br/>
+                    <button className="button">Restart</button>
+                  </div>
+                }
+                
+                
+                
 
               </CSSTransition>
             </SwitchTransition>
@@ -65,12 +92,7 @@ function App() {
               </div>
             </footer>
           </div>
-          {/* <div className="quizCompleted has-text-centered">
-                <h2 className="title">You did an amaizing Job!</h2>
-                <p className="subtitle">Total Score: 8/10</p>
-                <br/>
-                <button className="button">Restart</button>
-              </div> */}
+          
         </div>
       </section>
     </div>
