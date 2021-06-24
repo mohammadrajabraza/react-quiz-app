@@ -2,6 +2,7 @@ import './App.css';
 import Question from './components/Question'
 import { useState } from 'react'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
+import swal from 'sweetalert'
 
 const question_bank = [
   {  "question": "Who created the digital distribution platform Steam?", "correct_answer": "Valve", "answers": ["Valve", "Pixeltail Games", "Ubisoft", "Electronic Arts"] },
@@ -23,7 +24,6 @@ function App() {
 
   const verifyAnswer = (answer) => question_bank[current_index].answers[answer] === 
                                                     question_bank[current_index].correct_answer
-
   const markAnswer = (index) => {
     
     let newResult = {
@@ -41,9 +41,14 @@ function App() {
   }
 
   const next = () => {
-    current_index < 10 ?
+    // 
+    if(results[current_index] === undefined)
+      swal({text: 'Answer is required to proceed!', icon:'error'})
+    else {
+      current_index < question_bank.length ?
       setCurrentIndex(current_index + 1) :
       alert('Bhaag lo')
+    }
   }
 
   const back = () => {
@@ -74,7 +79,9 @@ function App() {
                 timeout={500}
                 classNames="fade">
                 {
-                  current_index <= 9 ?
+                  // Condition checks for the questions count and once questions finished
+                  // will display result
+                  current_index <= question_bank.length -1 ?
                   <Question question={question_bank[current_index]} markAnswer={markAnswer} results={results[current_index]}/> :
                   <div className="quizCompleted has-text-centered">
                     <h2 className="title">You did an amaizing Job!</h2>
@@ -84,9 +91,6 @@ function App() {
                   </div>
                 }
                 
-                
-                
-
               </CSSTransition>
             </SwitchTransition>
             <footer className="questionFooter">
