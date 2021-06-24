@@ -39,7 +39,7 @@ function App() {
 
     setResult(tempResults)
   }
-  
+
   const next = () => {
     current_index < 10 ?
       setCurrentIndex(current_index + 1) :
@@ -87,8 +87,8 @@ function App() {
             </SwitchTransition>
             <footer className="questionFooter">
               <div className="actions">
-                <button className="button" onClick={back}>Back</button>
-                <button className="button" onClick={next}>Next</button>
+                <button className="button" onClick={back} disabled={current_index === 0}>Back</button>
+                <button className="button" onClick={next} disabled={current_index === 10}>Next</button>
               </div>
             </footer>
           </div>
