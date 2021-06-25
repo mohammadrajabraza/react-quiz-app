@@ -1,5 +1,6 @@
 import './App.css';
 import Question from './components/Question'
+import Result from './components/Result';
 import { useState } from 'react'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
 import swal from 'sweetalert'
@@ -98,12 +99,7 @@ function App() {
                   // will display result
                   current_index <= question_bank.length -1 ?
                   <Question question={question_bank[current_index]} markAnswer={markAnswer} results={results[current_index]}/> :
-                  <div className="quizCompleted">
-                    <h2 className="title">{`You did an ${score > 7 ? 'Amaizing' : (score > 4 ? 'Good': 'Poor')} Job!`}</h2>
-                    <p className="subtitle">Total Score: {score}/10</p>
-                    <br/>
-                    <button className="button" onClick={restartQuiz}>Restart</button>
-                  </div>
+                  <Result restartQuiz={restartQuiz} quizScore={score}/>
                 }
                 
               </CSSTransition>
