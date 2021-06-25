@@ -68,6 +68,8 @@ function App() {
 
   const restartQuiz = () => {
     setCurrentIndex(0);
+    setResult([])
+    setScore(0)
   }
 
   const getScore = () => {
@@ -80,10 +82,10 @@ function App() {
         <div className="questionBox" id="app">
           <div className="questionContainer">
             <header>
-              <h1 className="title is-6">Quiz App</h1>
+              <h1 className="title">React Quiz App</h1>
               <div className="progressContainer">
-                <progress className="progress is-info is-small">{(current_index/question_bank.length)*100}</progress>
-                <p></p>
+                <progress className="progress" value={(current_index+1) * question_bank.length} max="100"></progress>
+                <p>{`${current_index === question_bank.length ? current_index :  current_index + 1}/${question_bank.length }`}</p>
               </div>
             </header>
             <SwitchTransition mode="out-in">
@@ -96,7 +98,7 @@ function App() {
                   // will display result
                   current_index <= question_bank.length -1 ?
                   <Question question={question_bank[current_index]} markAnswer={markAnswer} results={results[current_index]}/> :
-                  <div className="quizCompleted has-text-centered">
+                  <div className="quizCompleted">
                     <h2 className="title">{`You did an ${score > 7 ? 'Amaizing' : (score > 4 ? 'Good': 'Poor')} Job!`}</h2>
                     <p className="subtitle">Total Score: {score}/10</p>
                     <br/>
