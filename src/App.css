@@ -86,25 +86,6 @@ body {
   margin-top: 0.5rem;
 }
 
-
-
-.questionBox .quizForm {
-  display: block;
-  white-space: normal;
-  height: 100%;
-  width: 100%;
-}
-
-.questionBox .quizForm .quizFormContainer {
-  height: 100%;
-  margin: 15px 18px;
-}
-
-.questionBox .quizForm .quizFormContainer .field-label {
-  text-align: left;
-  margin-bottom: 0.5rem;
-}
-
 .questionBox .questionContainer {
   white-space: normal;
   height: 100%;
@@ -165,13 +146,6 @@ body {
   .questionBox .questionContainer {
     display: flex;
     flex-direction: column;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .sidebar {
-    height: auto !important;
-    border-radius: 6px 6px 0px 0px;
   }
 }
 

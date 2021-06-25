@@ -22,3 +22,7 @@
 .icon.amaizing {
     color: #1565c0;
 }
+
+.quizCompleted .title {
+    font-size: 2rem;
+}
