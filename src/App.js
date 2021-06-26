@@ -1,40 +1,49 @@
 import './App.css';
 import Question from './components/Question'
 import Result from './components/Result';
-import { useState } from 'react'
+import { useState} from 'react'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
 import swal from 'sweetalert'
 
 const question_bank = [
-  {  "question": "Who created the digital distribution platform Steam?", "correct_answer": "Valve", "answers": ["Valve", "Pixeltail Games", "Ubisoft", "Electronic Arts"] },
-  {  "question": `Who is the main character in "The Stanley Parable"?`, "correct_answer": "Stanley", "answers": ["The Adventure Line","Stanley", "The Narrator", "The Boss"] },
-  {  "question": `In the 2002 video game "Kingdom Hearts", how many Keyblades are usable?`, "correct_answer": "18", "answers": ["13", "16", "18", "15"] },
-  {  "question": `Which of these is NOT the name of a rival gang in the video game Saint's Row 2?`, "correct_answer": "The Zin Empire", "answers": ["The Zin Empire", "The Brotherhood", "The Ronin", "The Sons of Samedi"] },
-  {  "question": "Who is the creator of the Super Smash Bros. Series?", "correct_answer": "Masahiro Sakurai", "answers": ["Reggie Fils-Aim", "Bill Trinen", "Hideo Kojima", "Masahiro Sakurai"] },
-  {  "question": `TF2: What code does Soldier put into the door keypad in "Meet the Spy"?`, "correct_answer": "1111", "answers": ["1432", "1111", "1337", "No code"] },
-  {  "question": `In the Half-Life series, Gordon Freeman's signature weapon is a:`, "correct_answer": "Crowbar", "answers": ["Crowbar", "Sledgehammer", "Fiber Wire", "Katana"] },
-  {  "question": "In Minecraft, which two items must be combined to craft a torch?", "correct_answer": "Stick and Coal", "answers": ["Stick and Fire", "Stick and Coal", "Wood and Coal", "Wood and Fire"] },
-  {  "question": "Lanky, Funky, and Chunky are all characters featured in which series owned by Nintendo?", "correct_answer": "Donkey Kong", "answers": ["Mario", "Kirby", "Donkey Kong", "Zelda"] },
-  {  "question": `In the "Metal Gear Solid" series, what's the name of Solid Snake's brother?`, "correct_answer": "Liquid Snake", "answers": ["Kulus Snake", "Liquid Snake", "Billy Snake", "Gilur Snake"] }
+                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":"Who created the digital distribution platform Steam?","correct_answer":"Valve","incorrect_answers":["Pixeltail Games","Ubisoft","Electronic Arts"]},
+                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":`Who is the main character in "The Stanley Parable"?`,"correct_answer":"Stanley","incorrect_answers":["The Adventure Line","The Narrator","The Boss"]},
+                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":`In the 2002 video game "Kingdom Hearts", how many Keyblades are usable?`,"correct_answer":"18","incorrect_answers":["13","16","15"]},
+                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":`Which of these is NOT the name of a rival gang in the video game Saint's Row 2?`,"correct_answer":"The Zin Empire","incorrect_answers":["The Brotherhood","The Ronin","The Sons of Samedi"]},
+                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":"Who is the creator of the Super Smash Bros. Series?","correct_answer":"Masahiro Sakurai","incorrect_answers":["Reggie Fils-Aim&eacute;","Bill Trinen","Hideo Kojima"]},
+                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":`TF2: What code does Soldier put into the door keypad in "Meet the Spy"?`,"correct_answer":"1111","incorrect_answers":["1432","1337","No code"]},
+                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":`In the Half-Life series, Gordon Freeman's signature weapon is a:`,"correct_answer":"Crowbar","incorrect_answers":["Sledgehammer","Fiber Wire","Katana"]},
+                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":"In Minecraft, which two items must be combined to craft a torch?","correct_answer":"Stick and Coal","incorrect_answers":["Stick and Fire","Wood and Coal","Wood and Fire"]},
+                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":"Lanky, Funky, and Chunky are all characters featured in which series owned by Nintendo?","correct_answer":"Donkey Kong","incorrect_answers":["Mario","Kirby","Zelda"]},
+                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":`In the "Metal Gear Solid" series, what's the name of Solid Snake's brother?`,"correct_answer":"Liquid Snake","incorrect_answers":["Kulus Snake","Billy Snake","Gilur Snake"]}
 ]
 
 function App() {
 
+  // keeps track of current question to be served
   const [current_index, setCurrentIndex] = useState(0)
+  
+  // stores result of each question
   const [results, setResult] = useState([])
+  
+  // stores the total score
   const [score, setScore] = useState(0);
+
+  const [quizFinished, setQuizFinished] = useState(false)
+
 
   const verifyAnswer = (answer) => {
     
-    return question_bank[current_index].answers[answer] === 
-              question_bank[current_index].correct_answer
+    return question_bank[current_index].correct_answer === answer
+              
   }
 
-  const markAnswer = (index) => {
+  // mark the current answer and store the result
+  const markAnswer = (ans) => {
     
     let newResult = {
-      givenAnswer : index,
-      isRight: verifyAnswer(index)
+      givenAnswer : ans,
+      isRight: verifyAnswer(ans)
     }
 
     let tempResults = [...results]
@@ -51,19 +60,25 @@ function App() {
     if(results[current_index] === undefined)
       swal({text: 'Answer is required to proceed!', icon:'error'})
     else {
-      //setState function dont take effect immediately
+      //?setState function doesn't take effect immediately
       if(current_index === question_bank.length -1){
         setScore(getScore())
       }
-
-      setCurrentIndex(current_index + 1)
+      current_index < question_bank.length - 1 ? 
+        setCurrentIndex(current_index + 1) :
+        setQuizFinished(true)
+      
     }
 
   }
 
   const back = () => {
-    current_index <= 0 ?
-      alert('Nikal lo') :
+
+    if(quizFinished)  
+    {
+      setQuizFinished(false)
+    } 
+    else 
       setCurrentIndex(current_index - 1)
   }
 
@@ -71,6 +86,7 @@ function App() {
     setCurrentIndex(0);
     setResult([])
     setScore(0)
+    setQuizFinished(false)
   }
 
   const getScore = () => {
@@ -97,9 +113,15 @@ function App() {
                 {
                   // Condition checks for the questions count and once questions finished
                   // will display result
-                  current_index <= question_bank.length -1 ?
-                  <Question question={question_bank[current_index]} markAnswer={markAnswer} results={results[current_index]}/> :
-                  <Result restartQuiz={restartQuiz} quizScore={score}/>
+                  quizFinished ?
+                  <Result restartQuiz={restartQuiz} quizScore={score}/> :
+                  <Question 
+                    // passing current question
+                    question={question_bank[current_index]}
+                    // 
+                    markAnswer={markAnswer} 
+                    results={results[current_index]}
+                    current_index={current_index}/> 
                 }
                 
               </CSSTransition>
