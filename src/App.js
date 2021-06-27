@@ -1,24 +1,14 @@
-import './App.css';
+import './App.css'
 import Question from './components/Question'
-import Result from './components/Result';
-import { useState} from 'react'
+import Result from './components/Result'
+import { useEffect, useState} from 'react'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
 import swal from 'sweetalert'
-
-const question_bank = [
-                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":"Who created the digital distribution platform Steam?","correct_answer":"Valve","incorrect_answers":["Pixeltail Games","Ubisoft","Electronic Arts"]},
-                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":`Who is the main character in "The Stanley Parable"?`,"correct_answer":"Stanley","incorrect_answers":["The Adventure Line","The Narrator","The Boss"]},
-                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":`In the 2002 video game "Kingdom Hearts", how many Keyblades are usable?`,"correct_answer":"18","incorrect_answers":["13","16","15"]},
-                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":`Which of these is NOT the name of a rival gang in the video game Saint's Row 2?`,"correct_answer":"The Zin Empire","incorrect_answers":["The Brotherhood","The Ronin","The Sons of Samedi"]},
-                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":"Who is the creator of the Super Smash Bros. Series?","correct_answer":"Masahiro Sakurai","incorrect_answers":["Reggie Fils-Aim&eacute;","Bill Trinen","Hideo Kojima"]},
-                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":`TF2: What code does Soldier put into the door keypad in "Meet the Spy"?`,"correct_answer":"1111","incorrect_answers":["1432","1337","No code"]},
-                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":`In the Half-Life series, Gordon Freeman's signature weapon is a:`,"correct_answer":"Crowbar","incorrect_answers":["Sledgehammer","Fiber Wire","Katana"]},
-                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":"In Minecraft, which two items must be combined to craft a torch?","correct_answer":"Stick and Coal","incorrect_answers":["Stick and Fire","Wood and Coal","Wood and Fire"]},
-                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":"Lanky, Funky, and Chunky are all characters featured in which series owned by Nintendo?","correct_answer":"Donkey Kong","incorrect_answers":["Mario","Kirby","Zelda"]},
-                    {"category":"Entertainment: Video Games","type":"multiple","difficulty":"easy","question":`In the "Metal Gear Solid" series, what's the name of Solid Snake's brother?`,"correct_answer":"Liquid Snake","incorrect_answers":["Kulus Snake","Billy Snake","Gilur Snake"]}
-]
+import Loader from 'react-loader-spinner'
 
 function App() {
+
+  const [question_bank, setQuestionBank] = useState([])
 
   // keeps track of current question to be served
   const [current_index, setCurrentIndex] = useState(0)
@@ -31,12 +21,18 @@ function App() {
 
   const [quizFinished, setQuizFinished] = useState(false)
 
+  const [isQuestionsLoaded, setIsQuestionLoaded] = useState(false)
 
-  const verifyAnswer = (answer) => {
-    
-    return question_bank[current_index].correct_answer === answer
-              
-  }
+  useEffect(() => {
+    fetch('https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple')
+      .then((res) => res.json())
+      .then((data) => {
+        setQuestionBank(data.results)
+        setIsQuestionLoaded(true)
+      })
+  }, [])
+
+  const verifyAnswer = (answer) => question_bank[current_index].correct_answer === answer
 
   // mark the current answer and store the result
   const markAnswer = (ans) => {
@@ -46,8 +42,7 @@ function App() {
       isRight: verifyAnswer(ans)
     }
 
-    let tempResults = [...results]
-    
+    let tempResults = [...results]   
     tempResults[current_index] === undefined ?
       tempResults.push(newResult) :
       tempResults[current_index] = newResult
@@ -67,18 +62,12 @@ function App() {
       current_index < question_bank.length - 1 ? 
         setCurrentIndex(current_index + 1) :
         setQuizFinished(true)
-      
     }
-
   }
 
   const previousQuestion = () => {
-
-    if(quizFinished)  
-    {
-      setQuizFinished(false)
-    } 
-    else 
+    quizFinished ? 
+      setQuizFinished(false) : 
       setCurrentIndex(current_index - 1)
   }
 
@@ -115,20 +104,21 @@ function App() {
                   // will display result
                   quizFinished ?
                   <Result restartQuiz={restartQuiz} quizScore={score}/> :
+                  (isQuestionsLoaded ? 
                   <Question 
                     // passing current question
                     question={question_bank[current_index]}
-                    // 
                     markAnswer={markAnswer} 
                     results={results[current_index]}
-                    current_index={current_index}/> 
+                    current_index={current_index}/>:
+                    <Loader className="loader" type="Grid" color="#BBDEFB"  height={100} width={100}/>) 
                 }
                 
               </CSSTransition>
             </SwitchTransition>
             <footer className="questionFooter">
               <div className="actions">
-                <button className="button" onClick={previousQuestion} disabled={current_index === 0}>Previous</button>
+                <button className="button" onClick={previousQuestion} disabled={current_index === 0}>Prev</button>
                 <button className="button" onClick={nextQuestion} disabled={current_index === 10}>Next</button>
               </div>
             </footer>

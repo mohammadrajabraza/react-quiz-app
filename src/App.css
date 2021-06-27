@@ -180,3 +180,10 @@ body {
   opacity: 0;
   transform: translateX(-200%);
 }
+
+.loader {
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
