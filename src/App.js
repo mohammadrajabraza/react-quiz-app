@@ -55,7 +55,7 @@ function App() {
     setResult(tempResults)
   }
 
-  const next = () => {
+  const nextQuestion = () => {
     // 
     if(results[current_index] === undefined)
       swal({text: 'Answer is required to proceed!', icon:'error'})
@@ -72,7 +72,7 @@ function App() {
 
   }
 
-  const back = () => {
+  const previousQuestion = () => {
 
     if(quizFinished)  
     {
@@ -128,8 +128,8 @@ function App() {
             </SwitchTransition>
             <footer className="questionFooter">
               <div className="actions">
-                <button className="button" onClick={back} disabled={current_index === 0}>Back</button>
-                <button className="button" onClick={next} disabled={current_index === 10}>Next</button>
+                <button className="button" onClick={previousQuestion} disabled={current_index === 0}>Previous</button>
+                <button className="button" onClick={nextQuestion} disabled={current_index === 10}>Next</button>
               </div>
             </footer>
           </div>
